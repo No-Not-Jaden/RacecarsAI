@@ -1,19 +1,21 @@
 
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class EnvironmentTest {
     int[][] path = new int[][]{
-            { 0, 0, 0, 0, 0,48,49,50, 0, 0},
-            {17,18,19, 0, 0,47, 0, 0, 0, 0},
-            {16, 0, 0,20, 0,46,45,44,43, 0},
-            {15, 0, 0,21, 0, 0, 0, 0,42,41},
-            {14, 0, 0,22,23,24,25, 0, 0,40},
-            {13,12, 0, 0, 0, 0,26,27, 0,39},
-            { 0,11,10, 9, 8, 0, 0,28, 0,38},
-            { 0, 0, 0, 0, 7, 0,30,29, 0,37},
-            { 0, 0, 4, 5, 6, 0,31, 0, 0,36},
-            { 1, 2, 3, 0, 0, 0,32,33,34,35}
+            { 0, 0, 0, 0, 0,49,50,51,52,53},
+            {17,18,19, 0, 0,48, 0, 0, 0, 0},
+            {16, 0,20,21, 0,47,46,45,44, 0},
+            {15, 0, 0,22, 0, 0, 0, 0,43,42},
+            {14, 0, 0,23,24,25,26, 0, 0,41},
+            {13,12, 0, 0, 0, 0,27,28, 0,40},
+            { 0,11,10, 9, 8, 0, 0,29, 0,39},
+            { 0, 0, 0, 0, 7, 0,31,30, 0,38},
+            { 0, 0, 4, 5, 6, 0,32, 0, 0,37},
+            { 1, 2, 3, 0, 0, 0,33,34,35,36}
     };
     int scale = 10;
     Environment environment = new Environment(path, scale);
@@ -23,7 +25,7 @@ class EnvironmentTest {
     void getTileValue() {
         assertEquals(1, environment.getTileValue(90,0));
         assertEquals(0, environment.getTileValue(1,5));
-        assertEquals(22, environment.getTileValue(46,32));
+        assertEquals(23, environment.getTileValue(46,32));
         assertEquals(0, environment.getTileValue(-2,3));
         assertEquals(0, environment.getTileValue(1,-99));
         assertEquals(0, environment.getTileValue(1000,230));
@@ -37,5 +39,15 @@ class EnvironmentTest {
 
     @org.junit.jupiter.api.Test
     void getDistanceToWalls() {
+        float[] result = environment.getDistanceToWalls(8, 15, 5, 0.1f, 0.5f);
+        int[] roundedResult = new int[result.length];
+        for (int i = 0; i < result.length; i++) {
+            roundedResult[i] = Math.round(result[i]);
+        }
+        int[] expected = new int[]{45,7,25,7,5,7,5,7};
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], roundedResult[i]);
+        }
+
     }
 }

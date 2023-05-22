@@ -14,5 +14,7 @@ public class Main {
         };
 
         //Environment environment = new Environment(path);
+
+        new Network().getOutputs();
     }
 }

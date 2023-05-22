@@ -30,17 +30,18 @@ public class Environment {
     public float[] getDistanceToWalls(int rays, float x, float y, float accuracy, float blur){
         float[] distances = new float[rays];
         // for loop for each ray to be found - r is radians
-        for (int r = 0; r < 2 * Math.PI; r+= 2 * Math.PI / rays) {
+        for (double r = 0; r < 2 * Math.PI; r+= 2 * Math.PI / rays) {
             // these values are the distances between when the ray initially checks for collision
             float xBlockChange = (float) (Math.cos(r) * accuracy * scale);
             float yBlockChange = (float) (Math.sin(r) * accuracy * scale);
             // These values are going to be where the ray intercepts a wall
             float xIntercept = x;
             float yIntercept = y;
+            //System.out.println(r);
             // find where the next block intercept is
             while (!checkForWall(xIntercept - blur / 2, yIntercept - blur / 2, xIntercept + blur / 2, yIntercept + blur / 2)){
-                x+= xBlockChange;
-                y+= yBlockChange;
+                xIntercept+= xBlockChange;
+                yIntercept+= yBlockChange;
             }
             float distance = (float) Math.sqrt(Math.pow(xIntercept - x, 2) + Math.pow(yIntercept - y, 2)); // distance formula
             distances[(int) (r / (2 * Math.PI / rays))] = distance; // set the array value
