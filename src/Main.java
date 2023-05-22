@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
         int[][] path = new int[][]{
@@ -15,6 +17,45 @@ public class Main {
 
         //Environment environment = new Environment(path);
 
-        new Network().getOutputs();
+        /*
+        Network network = new Network(1, 2, 25, 1);
+        for (int i = 0; i < 10000; i++) {
+            double input = Math.random();
+            double output = 1 - input;
+            network.setValues(new double[]{input}, new double[]{output});
+            network.propagate(1);
+        }
+
+
+        network.setValues(new double[]{0.25}, new double[]{0.25});*/
+
+        Network network = new Network(2, 1, 100, 1);
+
+        double[][][] presetValues = new double[][][]{
+                {new double[]{0,0}, new double[]{0}},
+                {new double[]{0,1}, new double[]{1}},
+                {new double[]{1,0}, new double[]{1}},
+                {new double[]{1,1}, new double[]{0}}
+        };
+
+        for (int i = 0; i < 100000; i++) {
+            int index = (int) (Math.random() * 4);
+
+            network.setValues(presetValues[index][0], presetValues[index][1]);
+            network.propagate(1);
+        }
+
+
+        for (int i = 0; i < 5; i++) {
+
+            int index = (int) (Math.random() * 4);
+
+            network.setValues(presetValues[index][0], presetValues[index][1]);
+
+            System.out.println(Arrays.toString(presetValues[index][0]));
+            System.out.println(Arrays.toString(presetValues[index][1]));
+
+            System.out.println(Arrays.toString(network.forwardPropagate()));
+        }
     }
 }

@@ -1,10 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Neuron {
     private double bias = Math.random() * 2 - 1;
     private double[] weights;
     private final Neuron[] inputs;
+    protected double lastOutput;
+    private double learningRate = 0.25;
 
     public Neuron(Neuron[] inputs){
         randomizeWeights(inputs.length);
@@ -13,6 +12,7 @@ public class Neuron {
 
     /**
      * Compute an output by getting values and weights from previous neurons
+     * <p>Forward propagation</p>
      * @return Output of the neuron
      */
     public double compute(){
@@ -20,7 +20,23 @@ public class Neuron {
         for (int i = 0; i < inputs.length; i++) {
             preActivation+= weights[i] * inputs[i].compute();
         }
-        return sigmoid(preActivation);
+        lastOutput = sigmoid(preActivation);
+        return lastOutput;
+    }
+
+    /**
+     * weight(old) + learning rate * output error * output(neurons i) * output(neurons i+1) * (1 - output(neurons i+1))
+     * <p>Backwards propagation</p>
+     * @param outputError Output error of the last computation
+     */
+    public void changeWeights(double outputError){
+        for (int i = 0; i < inputs.length; i++) {
+            // change current weight
+            weights[i] = weights[i] + learningRate * outputError * inputs[i].lastOutput * lastOutput * (1 - lastOutput);
+            // change input weights
+            inputs[i].changeWeights(outputError);
+        }
+        bias = bias + learningRate * outputError * lastOutput * (1 - lastOutput);
     }
 
     /**
@@ -41,5 +57,9 @@ public class Neuron {
      */
     public static double sigmoid(double in){
         return 1 / (1 + Math.exp(-in));
+    }
+
+    public double getLastOutput() {
+        return lastOutput;
     }
 }
